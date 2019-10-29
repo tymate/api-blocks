@@ -62,7 +62,7 @@ It provides to predefined steps:
 Example:
 
 ```ruby
-class Requests::MarkAsRead < ApplicationInteractor
+class Requests::MarkAsRead < ApiBlocks::Interactor
   input do
     schema do
       required(:request).filled(type?: Request)

@@ -10,7 +10,7 @@ require "dry/validation"
 #
 # @example
 #
-#   class InviteUser < ApplicationInteractor
+#   class InviteUser < ApiBlocks::Interactor
 #     input do
 #       schema do
 #         required(:email).filled
@@ -48,7 +48,7 @@ class ApiBlocks::Interactor
   #
   # @example
   #
-  #   class FooInteractor < ApplicationInteractor
+  #   class FooInteractor < ApiBlocks::Interactor
   #     input do
   #       schema do
   #         required(:bar).filled
