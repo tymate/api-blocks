@@ -1,5 +1,9 @@
 # ApiBlocks
 
+![Gem](https://img.shields.io/gem/v/api-blocks?style=flat-square)
+![Code Climate](https://img.shields.io/codeclimate/maintainability/tymate/api-blocks?style=flat-square)
+![Inch](https://inch-ci.org/github/tymate/api-blocks.svg?branch=master)
+
 ApiBlocks provides simple and consistent Rails API extensions.
 
 Links:
