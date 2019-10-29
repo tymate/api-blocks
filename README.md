@@ -4,7 +4,7 @@ ApiBlocks provides simple and consistent Rails API extensions.
 
 Links:
 
-- API Documentation
+- [API Documentation](https://www.rubydoc.info/gems/api-blocks/0.1.1)
 - [Source Code](https://github.com/tymate/api-blocks)
 
 ## Installation
