@@ -1,8 +1,12 @@
+[gem]: https://rubygems.org/gems/api-blocks
+[code_climate]: https://codeclimate.com/github/tymate/api-blocks
+[inch]: https://inch-ci.org/github/tymate/api-blocks?branch=master
+
 # ApiBlocks
 
-![Gem](https://img.shields.io/gem/v/api-blocks?style=flat-square)
-![Code Climate](https://img.shields.io/codeclimate/maintainability/tymate/api-blocks?style=flat-square)
-![Inch](https://inch-ci.org/github/tymate/api-blocks.svg?branch=master)
+[![Gem](https://img.shields.io/gem/v/api-blocks?style=flat-square)][gem]
+[![Code Climate](https://img.shields.io/codeclimate/maintainability/tymate/api-blocks?style=flat-square)][code_climate]
+[![Inch](https://inch-ci.org/github/tymate/api-blocks.svg?branch=master)][inch]
 
 ApiBlocks provides simple and consistent Rails API extensions.
 
