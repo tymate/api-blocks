@@ -1,11 +1,14 @@
+# frozen_string_literal: true
+
 # frozen_string_litreal: true
 
-require "pundit"
+require 'pundit'
 
 # ApiBlocks::Controller provides a set of default configurations for
 # Ruby on Rails api controllers.
 #
-# It sets up `ApiBlocks::Responder` as a responder, `Pundit` and controller defaults.
+# It sets up `ApiBlocks::Responder` as a responder, `Pundit` and controller
+# defaults.
 #
 # @example
 #

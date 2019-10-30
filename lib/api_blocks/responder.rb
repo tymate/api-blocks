@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "action_controller/responder"
-require "responders"
-require "dry/monads"
+require 'action_controller/responder'
+require 'responders'
+require 'dry/monads/result'
 
 # ApiBlocks::Responder provides a responder with better error handling and
 # `ApiBlocks::Interactor` through `Dry::Monads::Result` support.
@@ -27,7 +27,8 @@ class ApiBlocks::Responder < ActionController::Responder
   def to_format
     return super unless resource.is_a?(Dry::Monads::Result)
 
-    # unwrap the result monad so it can be processed by ActionController::Responder
+    # unwrap the result monad so it can be processed by
+    # ActionController::Responder
     resource.fmap { |result| @resource = result }.or do |failure|
       @resource = failure
       @failure = true

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "dry/transaction"
-require "dry/validation"
+require 'dry/transaction'
+require 'dry/validation'
 
 # ApiBlocks::Interactor implements a base interactor class.
 #

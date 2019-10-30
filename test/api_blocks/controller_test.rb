@@ -1,12 +1,13 @@
-require "minitest/autorun"
-require "mocha/minitest"
-require "api_blocks"
-require "action_controller"
+# frozen_string_literal: true
+
+require 'minitest/autorun'
+require 'mocha/minitest'
+require 'api_blocks'
+require 'action_controller'
 
 describe ApiBlocks::Controller do
   class FooPolicy
-    def initialize(_record, _user)
-    end
+    def initialize(_record, _user); end
 
     def bar?
       true
@@ -34,7 +35,7 @@ describe ApiBlocks::Controller do
 
     Pundit::PolicyFinder
       .expects(:new)
-      .with([:api, :v1, :foo])
+      .with(%i[api v1 foo])
       .returns(policy_finder)
       .twice
 

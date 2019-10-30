@@ -1,7 +1,13 @@
+GIT
+  remote: https://github.com/tymate/rubocop-config-rufo
+  revision: 7941f57d84e59dc66c01cedf7e420013abcdbed7
+  specs:
+    rubocop-config-rufo (0.1.0)
+
 PATH
   remote: .
   specs:
-    api-blocks (0.1.1)
+    api-blocks (0.2.0)
       activesupport (>= 3.0.0)
       dry-monads (~> 1.3)
       dry-transaction (~> 0.13)
@@ -244,7 +250,8 @@ DEPENDENCIES
   rails (~> 6.0)
   rake
   rspec (>= 3.0.0)
-  rubocop (= 0.76.0)
+  rubocop (~> 0.76.0)
+  rubocop-config-rufo (~> 0.1.0)!
   yard
   yard-activesupport-concern
 
