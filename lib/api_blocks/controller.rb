@@ -45,17 +45,32 @@ module ApiBlocks::Controller
     def authorize(record, query = nil)
       super(self.class.pundit_api_scope + [record], query)
     end
+
+    handle_api_error Pundit::NotAuthorizedError do |error|
+      [{ detail: error.message }, :forbidden]
+    end
+
+    mattr_accessor :pundit_api_scope, default: []
   end
 
   class_methods do
     # Provide a default scope to pundit's `PolicyFinder`.
     def pundit_scope(*scope)
-      @pundit_api_scope = scope
+      self.pundit_api_scope = scope
     end
 
-    # Returns the scope for pundit's `PolicyFinder`.
-    def pundit_api_scope
-      @pundit_api_scope || []
+    # Defines a error handler that returns
+    def handle_api_error(error_class, &block)
+      rescue_from error_class do |ex|
+        problem, status =
+          if block_given?
+            yield ex
+          else
+            [{ detail: ex.message }, :ok]
+          end
+
+        render problem: problem, status: status
+      end
     end
   end
 end

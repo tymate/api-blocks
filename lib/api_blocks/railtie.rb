@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "problem_details-rails"
+
 # ApiBlocks::Railtie implements the Rails integration for ApiBlocks.
 #
 # @private
