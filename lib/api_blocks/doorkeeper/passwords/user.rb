@@ -17,7 +17,6 @@ module ApiBlocks::Doorkeeper::Passwords::User
     # Returns the token sent in the e-mail.
     def send_reset_password_instructions(application = nil)
       token = set_reset_password_token
-      puts token
       send_reset_password_instructions_notification(token, application)
 
       token
