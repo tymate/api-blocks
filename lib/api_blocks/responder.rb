@@ -10,20 +10,39 @@ require 'dry/monads/result'
 class ApiBlocks::Responder < ActionController::Responder
   include Responders::HttpCacheResponder
 
-  # Override resource_errors to handle more error kinds
+  # Override resource_errors to handle more error kinds and return a status
+  # code.
+  #
   def resource_errors
     case @resource
     when ApplicationRecord
-      { errors: @resource.errors }
+      [{ errors: @resource.errors }, :unprocessable_entity]
     when ActiveRecord::RecordInvalid
-      { errors: @resource.record.errors }
+      [{ errors: @resource.record.errors }, :unprocessable_entity]
     else
       # propagate the error so it can be handled through the standard rails
       # error handlers.
       raise @resource
     end
   end
+  # Display is just a shortcut to render a resource's errors with the current format
+  # using `problem_details` when format is set to JSON.
+  #
+  def display_errors
+    return super unless format == :json
 
+    errors, status = resource_errors
+
+    controller.render problem: errors, status: status
+  end
+
+  # All other formats follow the procedure below. First we try to render a
+  # template, if the template is not available, we verify if the resource
+  # responds to :to_format and display it.
+  #
+  # In addition, if the resource is a Dry::Monads::Result we unwrap it and
+  # assign the failure instead.
+  #
   def to_format
     return super unless resource.is_a?(Dry::Monads::Result)
 

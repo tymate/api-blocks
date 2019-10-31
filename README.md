@@ -171,6 +171,7 @@ bundle exec rails g api_blocks:doorkeeper:passwords:migration
 - [Responders](https://github.com/plataformatec/responders)
 - [Dry Transaction](https://dry-rb.org/gems/dry-transaction/0.13/)
 - [Dry Validation](https://dry-rb.org/gems/dry-validation/1.3/)
+- [Problem Details](https://github.com/nikushi/problem_details)
 
 # License
 
