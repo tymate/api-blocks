@@ -25,8 +25,9 @@ class ApiBlocks::Responder < ActionController::Responder
       raise @resource
     end
   end
-  # Display is just a shortcut to render a resource's errors with the current format
-  # using `problem_details` when format is set to JSON.
+
+  # Display is just a shortcut to render a resource's errors with the current
+  # format using `problem_details` when format is set to JSON.
   #
   def display_errors
     return super unless format == :json

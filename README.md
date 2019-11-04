@@ -155,14 +155,80 @@ end
 Update the devise mailer template to link to the callback API.
 
 ```erb
-# app/views/devise/mailer/invitation_instructions.html.erb
-<p><%= link_to t("devise.mailer.invitation_instructions.accept"), callback_v1_invitations_url(invitation_token: @token, client_id: @application.uid) %></p>
+# app/views/devise/mailer/reset_password_instructions.html.erb
+<p><%= link_to "Change my password", callback_v1_passwords_url(reset_password_token: @token) %></p>
 ```
 
 Finally, generate the required migrations:
 
 ```sh
 bundle exec rails g api_blocks:doorkeeper:passwords:migration
+```
+
+## ApiBlocks::Doorkeeper::Invitations
+
+Implement an API for devise_invitable using doorkeeper.
+
+Include the `ApiBlocks::Doorkeeper::Invitations::Controller` module in your api
+controller and define the `user_model` method to return the concerned devise
+user model.
+
+```ruby
+# app/controllers/api/v1/invitations_controller.rb
+class Api::V1::InvitationsController < Api::V1::ApplicationController
+  include ApiBlocks::Doorkeeper::Invitations::Controller
+
+  private
+
+  def user_model
+    User
+  end
+end
+```
+
+Add the approriate routes to your configuration.
+
+```ruby
+# config/routes.rb
+Rails.application.routes.draw do
+  scope module: :api do
+    namespace :v1 do
+      resources :invitations, only: %i[create show] do
+        get :callback, on: :collection
+        put :update, on: :collection
+      end
+    end
+  end
+end
+```
+
+Override your devise mailer `#invitation_instructions` method to add the
+`application` parameter.
+
+```ruby
+# app/mailers/devise_mailer.rb
+
+class DeviseMailer < Devise::Mailer
+  def invitation_instructions(_record, token, application: nil, **_opts)
+    @token = token
+    @application = application
+
+    super
+  end
+end
+```
+
+Update the devise mailer template to link to the callback API.
+
+```erb
+# app/views/devise/mailer/invitation_instructions.html.erb
+<p><%= link_to  t("devise.mailer.invitation_instructions.accept"), callback_v1_invitations_url(invitation_token: @token, client_id: @application.uid) %></p>
+```
+
+Finally, generate the required migrations:
+
+```sh
+bundle exec rails g api_blocks:doorkeeper:invitations:migration
 ```
 
 # External Resources

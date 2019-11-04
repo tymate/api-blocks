@@ -23,9 +23,24 @@ class ApiBlocks::Railtie < Rails::Railtie
         ApiBlocks::Doorkeeper::Passwords::Application
       )
     end
+
+    ActiveSupport.on_load(:active_record) do
+      # do not load the Doorkeeper::Application extensions if migrations have
+      # not been setup.
+      invitation_uri = Doorkeeper::Application.columns.find do |col|
+        col.name == 'invitation_uri'
+      end
+
+      next unless invitation_uri
+
+      Doorkeeper::Application.include(
+        ApiBlocks::Doorkeeper::Invitations::Application
+      )
+    end
   end
 
   generators do
     require_relative 'doorkeeper/passwords/migration_generator'
+    require_relative 'doorkeeper/invitations/migration_generator'
   end
 end

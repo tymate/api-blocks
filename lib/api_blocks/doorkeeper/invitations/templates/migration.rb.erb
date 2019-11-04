@@ -1,0 +1,7 @@
+class AddInvitationUriToDoorkeeperApplications < ActiveRecord::Migration<%= migration_version %>
+  def change
+    change_table :oauth_applications do |t|
+      t.string :invitation_uri
+    end
+  end
+end

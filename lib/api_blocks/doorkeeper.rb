@@ -5,4 +5,5 @@ module ApiBlocks::Doorkeeper
   extend ActiveSupport::Autoload
 
   autoload :Passwords
+  autoload :Invitations
 end

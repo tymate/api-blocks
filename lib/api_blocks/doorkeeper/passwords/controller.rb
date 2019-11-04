@@ -65,10 +65,8 @@ module ApiBlocks::Doorkeeper::Passwords::Controller
     # Initialize the reset password workflow, sends a reset password email to
     # the user.
     def create
-      application = Doorkeeper::Application.find_by!(uid: params[:client_id])
-
       user = user_model.send_reset_password_instructions(
-        create_params, application: application
+        create_params, application: oauth_application
       )
 
       if successfully_sent?(user)
@@ -81,29 +79,26 @@ module ApiBlocks::Doorkeeper::Passwords::Controller
     # Handles the redirection from the email towards the application's
     # `redirect_uri`.
     def callback
-      application = Doorkeeper::Application.find_by!(uid: params[:client_id])
-
       query = {
         reset_password_token: params[:reset_password_token]
       }.to_query
 
       redirect_to(
-        "#{application.reset_password_uri}?#{query}"
+        "#{oauth_application.reset_password_uri}?#{query}"
       )
     end
 
     # Updates the user password and returns a new Doorkeeper::AccessToken.
     def update
-      application = Doorkeeper::Application.find_by!(uid: params[:client_id])
       user = user_model.reset_password_by_token(update_params)
 
-      if user.errors.empty?
-        user.unlock_access! if unlockable?(user)
+      return respond_with(user) unless user.errors.empty?
 
-        render json: access_token(application, user)
-      else
-        respond_with(user)
-      end
+      user.unlock_access! if unlockable?(user)
+
+      respond_with(Doorkeeper::OAuth::TokenResponse.new(
+        access_token(oauth_application, user)
+      ).body)
     end
 
     private
@@ -147,6 +142,12 @@ module ApiBlocks::Doorkeeper::Passwords::Controller
         Doorkeeper.configuration.default_scopes,
         Doorkeeper.configuration.access_token_expires_in,
         true
+      )
+    end
+
+    def oauth_application
+      @oauth_application ||= Doorkeeper::Application.find_by!(
+        uid: params[:client_id]
       )
     end
 

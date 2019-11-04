@@ -60,7 +60,7 @@ module ApiBlocks::Controller
     end
 
     # Defines a error handler that returns
-    def handle_api_error(error_class, &block)
+    def handle_api_error(error_class)
       rescue_from error_class do |ex|
         problem, status =
           if block_given?
