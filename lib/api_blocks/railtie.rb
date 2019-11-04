@@ -7,8 +7,10 @@ require "problem_details-rails"
 # @private
 #
 class ApiBlocks::Railtie < Rails::Railtie
-  config.after_initialize  do
+  initializer 'api_blocks.doorkeeper' do
     next unless defined?(Doorkeeper)
+
+    Doorkeeper::Orm::ActiveRecord.initialize_models!
 
     ActiveSupport.on_load(:active_record) do
       # do not load the Doorkeeper::Application extensions if migrations have
