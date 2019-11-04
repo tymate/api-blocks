@@ -144,9 +144,11 @@ Include the reset password `Doorkeeper::Application` extensions.
 # config/initializers/doorkeeper.rb
 
 Doorkeeper.configure do
-  Doorkeeper::Application.include(
-    ApiBlocks::Doorkeeper::Passwords::Application
-  )
+  # ...
+end
+
+class ::Doorkeeper::Application < ActiveRecord::Base
+  include ApiBlocks::Doorkeeper::Passwords::Application
 end
 ```
 
@@ -220,9 +222,11 @@ Include the invitations `Doorkeeper::Application` extensions.
 # config/initializers/doorkeeper.rb
 
 Doorkeeper.configure do
-  Doorkeeper::Application.include(
-    ApiBlocks::Doorkeeper::Invitations::Application
-  )
+  # ...
+end
+
+class ::Doorkeeper::Application < ActiveRecord::Base
+  include ApiBlocks::Doorkeeper::Invitations::Application
 end
 ```
 
