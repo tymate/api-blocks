@@ -138,6 +138,18 @@ class User < ApplicationRecord
 end
 ```
 
+Include the reset password `Doorkeeper::Application` extensions.
+
+```ruby
+# config/initializers/doorkeeper.rb
+
+Doorkeeper.configure do
+  Doorkeeper::Application.include(
+    ApiBlocks::Doorkeeper::Passwords::Application
+  )
+end
+```
+
 Override your devise mailer `#reset_password_instructions` method to add the
 `application` parameter.
 
@@ -199,6 +211,18 @@ Rails.application.routes.draw do
       end
     end
   end
+end
+```
+
+Include the invitations `Doorkeeper::Application` extensions.
+
+```ruby
+# config/initializers/doorkeeper.rb
+
+Doorkeeper.configure do
+  Doorkeeper::Application.include(
+    ApiBlocks::Doorkeeper::Invitations::Application
+  )
 end
 ```
 
