@@ -57,6 +57,15 @@ module ApiBlocks::Controller
   end
 
   class_methods do
+    # Returns the `pundit_api_scope` value that was defined last looking up into
+    # the inheritance chain of the current class.
+    def inherited_pundit_api_scope
+      ancestors
+        .select { |a| a.respond_to?(:pundit_api_scope) }
+        .find(&:pundit_api_scope)
+        .pundit_api_scope
+    end
+
     # Provide a default scope to pundit's `PolicyFinder`.
     def pundit_scope(*scope)
       self.pundit_api_scope = scope
