@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # frozen_string_litreal: true
 
 require 'pundit'
@@ -37,20 +35,24 @@ module ApiBlocks::Controller
     # Override policy_scope to lookup pundit policies under the `scope`
     # namespace
     def policy_scope(scope)
-      super(self.class.pundit_api_scope + [scope])
+      api_scope = self.class.pundit_api_scope || []
+
+      super(api_scope + [scope])
     end
 
     # Override authorize to lookup pundit policies under the `scope`
     # namespace
     def authorize(record, query = nil)
-      super(self.class.pundit_api_scope + [record], query)
+      api_scope = self.class.pundit_api_scope || []
+
+      super(api_scope + [record], query)
     end
 
     handle_api_error Pundit::NotAuthorizedError do |error|
       [{ detail: error.message }, :forbidden]
     end
 
-    mattr_accessor :pundit_api_scope, default: []
+    thread_mattr_accessor :pundit_api_scope
   end
 
   class_methods do
