@@ -1,6 +1,7 @@
 # frozen_string_litreal: true
 
 require 'pundit'
+require 'active_support/core_ext/module'
 
 # ApiBlocks::Controller provides a set of default configurations for
 # Ruby on Rails api controllers.
@@ -20,6 +21,8 @@ module ApiBlocks::Controller
   extend ActiveSupport::Concern
 
   included do
+    thread_mattr_accessor :pundit_api_scope
+
     self.responder = ApiBlocks::Responder
 
     before_action :verify_request_format!
@@ -51,8 +54,6 @@ module ApiBlocks::Controller
     handle_api_error Pundit::NotAuthorizedError do |error|
       [{ detail: error.message }, :forbidden]
     end
-
-    thread_mattr_accessor :pundit_api_scope
   end
 
   class_methods do
