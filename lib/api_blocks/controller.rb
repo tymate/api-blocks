@@ -38,7 +38,7 @@ module ApiBlocks::Controller
     # Override policy_scope to lookup pundit policies under the `scope`
     # namespace
     def policy_scope(scope)
-      api_scope = self.class.pundit_api_scope || []
+      api_scope = self.class.inherited_pundit_api_scope || []
 
       super(api_scope + [scope])
     end
@@ -46,7 +46,7 @@ module ApiBlocks::Controller
     # Override authorize to lookup pundit policies under the `scope`
     # namespace
     def authorize(record, query = nil)
-      api_scope = self.class.pundit_api_scope || []
+      api_scope = self.class.inherited_pundit_api_scope || []
 
       super(api_scope + [record], query)
     end
