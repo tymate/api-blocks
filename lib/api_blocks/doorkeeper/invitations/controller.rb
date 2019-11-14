@@ -96,7 +96,7 @@ module ApiBlocks::Doorkeeper::Invitations::Controller
 
     # Returns the user model class.
     def user_model
-      raise 'the method `user_model` must be implemented on your password controller' # rubocop:disable Metrics/LineLength
+      raise 'the method `user_model` must be implemented on your invitations controller' # rubocop:disable Metrics/LineLength
     end
   end
 end

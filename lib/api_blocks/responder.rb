@@ -3,6 +3,7 @@
 require 'action_controller/responder'
 require 'responders'
 require 'dry/monads/result'
+require 'dry/validation/result'
 
 # ApiBlocks::Responder provides a responder with better error handling and
 # `ApiBlocks::Interactor` through `Dry::Monads::Result` support.
@@ -14,15 +15,17 @@ class ApiBlocks::Responder < ActionController::Responder
   # code.
   #
   def resource_errors
-    case @resource
-    when ApplicationRecord
-      [{ errors: @resource.errors }, :unprocessable_entity]
+    case resource
+    when Dry::Validation::Result
+      [{ errors: resource.errors.to_h }, :unprocessable_entity]
     when ActiveRecord::RecordInvalid
-      [{ errors: @resource.record.errors }, :unprocessable_entity]
-    else
+      [{ errors: resource.record.errors }, :unprocessable_entity]
+    when StandardError
       # propagate the error so it can be handled through the standard rails
       # error handlers.
-      raise @resource
+      raise resource
+    else
+      super
     end
   end
 
@@ -45,13 +48,8 @@ class ApiBlocks::Responder < ActionController::Responder
   # assign the failure instead.
   #
   def to_format
-    return super unless resource.is_a?(Dry::Monads::Result)
-
-    # unwrap the result monad so it can be processed by
-    # ActionController::Responder
-    resource.fmap { |result| @resource = result }.or do |failure|
-      @resource = failure
-      @failure = true
+    if resource.is_a?(Dry::Monads::Result)
+      unwrap_dry_result
     end
 
     super
@@ -61,6 +59,10 @@ class ApiBlocks::Responder < ActionController::Responder
     return true if @failure
 
     super
+  end
+
+  def json_resource_errors
+    [{ errors: resource.errors }, :unprocessable_entity]
   end
 
   # Override ActionController::Responder#api_behavior in order to
@@ -78,6 +80,17 @@ class ApiBlocks::Responder < ActionController::Responder
       display resource
     else
       head :no_content
+    end
+  end
+
+  private
+
+  def unwrap_dry_result
+    # unwrap the result monad so it can be processed by
+    # ActionController::Responder
+    resource.fmap { |result| @resource = result }.or do |failure|
+      @resource = failure
+      @failure = true
     end
   end
 end
