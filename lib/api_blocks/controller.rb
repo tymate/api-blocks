@@ -21,8 +21,6 @@ module ApiBlocks::Controller
   extend ActiveSupport::Concern
 
   included do
-    mattr_accessor :pundit_api_scope
-
     self.responder = ApiBlocks::Responder
 
     before_action :verify_request_format!
@@ -68,8 +66,13 @@ module ApiBlocks::Controller
 
     # Provide a default scope to pundit's `PolicyFinder`.
     def pundit_scope(*scope)
-      self.pundit_api_scope = scope
+      @pundit_api_scope ||= scope
     end
+
+    def pundit_api_scope
+      @pundit_api_scope
+    end
+
 
     # Defines a error handler that returns
     def handle_api_error(error_class)
