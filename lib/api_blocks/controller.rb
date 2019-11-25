@@ -21,7 +21,7 @@ module ApiBlocks::Controller
   extend ActiveSupport::Concern
 
   included do
-    thread_mattr_accessor :pundit_api_scope
+    mattr_accessor :pundit_api_scope
 
     self.responder = ApiBlocks::Responder
 
