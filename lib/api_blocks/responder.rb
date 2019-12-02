@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'action_controller/responder'
-require 'responders'
-require 'dry/monads/result'
-require 'dry/validation/result'
+require "action_controller/responder"
+require "responders"
+require "dry/monads/result"
+require "dry/validation/result"
 
 # ApiBlocks::Responder provides a responder with better error handling and
 # `ApiBlocks::Interactor` through `Dry::Monads::Result` support.
@@ -20,6 +20,10 @@ class ApiBlocks::Responder < ActionController::Responder
       [{ errors: resource.errors.to_h }, :unprocessable_entity]
     when ActiveRecord::RecordInvalid
       [{ errors: resource.record.errors }, :unprocessable_entity]
+    when String
+      [{ detail: resource }, :internal_server_error]
+    when ProblemDetails::Document
+      [resource.to_h, resource.status]
     when StandardError
       # propagate the error so it can be handled through the standard rails
       # error handlers.
