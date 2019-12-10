@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/tymate/rubocop-config-rufo
-  revision: 7941f57d84e59dc66c01cedf7e420013abcdbed7
+  revision: 4c7385ffc70bc0db1babeb70f7d4535ed60a96a7
   specs:
     rubocop-config-rufo (0.1.0)
 
