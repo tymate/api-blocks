@@ -20,6 +20,8 @@ class ApiBlocks::Responder < ActionController::Responder
       [{ errors: resource.errors.to_h }, :unprocessable_entity]
     when ActiveRecord::RecordInvalid
       [{ errors: resource.record.errors }, :unprocessable_entity]
+    when ActiveModel::ValidationError
+      [{ errors: resource.model.errors }, :unprocessable_entity]
     when String
       [{ detail: resource }, :internal_server_error]
     when ProblemDetails::Document
