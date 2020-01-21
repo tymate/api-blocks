@@ -7,7 +7,7 @@ GIT
 PATH
   remote: .
   specs:
-    api-blocks (0.4.11)
+    api-blocks (0.5.0)
       activesupport (>= 3.0.0)
       dry-configurable (~> 0.8)
       dry-monads (~> 1.3)
