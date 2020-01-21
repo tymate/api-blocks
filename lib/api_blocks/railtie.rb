@@ -11,4 +11,12 @@ class ApiBlocks::Railtie < Rails::Railtie
     require_relative 'doorkeeper/passwords/migration_generator'
     require_relative 'doorkeeper/invitations/migration_generator'
   end
+
+  initializer "blueprinter.batch_loader_integration" do |app|
+    app.config.after_initialize do
+      next unless ApiBlocks.config.blueprinter.use_batch_loader
+
+      require_relative "blueprinter/association_extractor"
+    end
+  end
 end

@@ -21,6 +21,24 @@ Links:
 gem 'api-blocks'
 ```
 
+## Configuration
+
+In an initializer such as `config/initializers/api_blocks.rb` you can enable the
+optional [blueprinter](https://github.com/procore/blueprinter) and
+[batch-loader](https://github.com/exAspArk/batch-loader) integration:
+
+```ruby
+ApiBlocks.configure do |config|
+  config.blueprinter.use_batch_loader = true
+end
+```
+
+This allows you to use `batch-loader` in order to avoid n+1 queries when
+serializing associations in blueprints.
+
+This has some caveats which are documented in
+[association_extractor.rb](lib/api_blocks/blueprinter/association_extractor.rb).
+
 ## ApiBlocks::Controller
 
 Include `ApiBlocks::Controller` in your api controller:
