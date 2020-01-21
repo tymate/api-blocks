@@ -67,7 +67,7 @@ class ApiBlocks::Responder < ActionController::Responder
     super
   end
 
-  def json_resource_errors
+  def json_sesource_errors
     [{ errors: resource.errors }, :unprocessable_entity]
   end
 

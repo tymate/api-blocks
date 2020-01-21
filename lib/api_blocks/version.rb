@@ -2,5 +2,5 @@
 
 module ApiBlocks
   # Current version of ApiBlocks
-  VERSION = "0.4.11"
+  VERSION = "0.5.0"
 end
