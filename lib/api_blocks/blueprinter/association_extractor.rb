@@ -24,29 +24,35 @@ class Blueprinter::AssociationExtractor < Blueprinter::Extractor
                     end
 
     view = options[:view] || :default
+    scope = if options[:block].present?
+      options[:block].call(object, local_options)
+    else
+      {}
+    end
 
     BatchLoader.for(association_id).batch(
       default_value: default_value,
-      key: [association_name, association_klass, view, options[:blueprint]],
-    ) do |ids, loader, _args|
+      key: [association_name, association_klass, view, options[:blueprint], scope],
+    ) do |ids, loader, args|
       model = association_klass.safe_constantize
+      scope = args[:key].last
 
       case association
       when ActiveRecord::Associations::HasManyAssociation
-        model.where(join_key.key => ids).each do |record|
+        model.where(join_key.key => ids).merge(scope).each do |record|
           loader.call(record.send(join_key.key)) do |memo|
             memo << render_blueprint(record, local_options, options)
           end
         end
       when ActiveRecord::Associations::HasOneAssociation
-        model.where(join_key.key => ids).each do |record|
+        model.where(join_key.key => ids).merge(scope).each do |record|
           loader.call(
             record.send(join_key.key),
             render_blueprint(record, local_options, options)
           )
         end
       when ActiveRecord::Associations::BelongsToAssociation
-        model.where(join_key.key => ids).each do |record|
+        model.where(join_key.key => ids).merge(scope).each do |record|
           loader.call(
             record.id,
             render_blueprint(record, local_options, options)
