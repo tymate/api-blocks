@@ -7,12 +7,18 @@
 # `options[:blueprint]`
 #
 class Blueprinter::AssociationExtractor < Blueprinter::Extractor
+  alias_method :original_extract, :extract
+
   def extract(association_name, object, local_options, options = {})
+    association = object.association(association_name)
+
+    if association.is_a?(ActiveRecord::Associations::HasManyThroughAssociation)
+      return original_extract(association_name, object, local_optins, options)
+    end
+
     if options[:blueprint].is_a?(Proc)
       raise "Cannot load blueprints with a `proc` blueprint option with batch-loader"
     end
-
-    association = object.association(association_name)
 
     join_key = association.reflection.join_keys
     association_id = object.send(join_key.foreign_key)
