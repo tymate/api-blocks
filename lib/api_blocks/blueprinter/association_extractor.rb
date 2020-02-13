@@ -13,7 +13,7 @@ class Blueprinter::AssociationExtractor < Blueprinter::Extractor
     association = object.association(association_name)
 
     if association.is_a?(ActiveRecord::Associations::HasManyThroughAssociation)
-      return original_extract(association_name, object, local_optins, options)
+      return original_extract(association_name, object, local_options, options)
     end
 
     if options[:blueprint].is_a?(Proc)
