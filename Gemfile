@@ -10,7 +10,7 @@ gemspec
 group :development, :test do
   # Automatic Ruby code style checking tool. Aims to enforce the
   # community-driven Ruby Style Guide.
-  gem "rubocop", "~> 0.80.1"
+  gem "rubocop", "~> 0.81.0"
   # Turns off all rubocop cops that are unnecessary or might conflict with rufo.
   gem "rubocop-config-rufo", "~> 0.1.0", git: "https://github.com/tymate/rubocop-config-rufo"
 end
