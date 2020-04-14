@@ -10,6 +10,10 @@ class Blueprinter::AssociationExtractor < Blueprinter::Extractor
   alias_method :original_extract, :extract
 
   def extract(association_name, object, local_options, options = {})
+    if !options.fetch(:batch, true)
+      return original_extract(association_name, object, local_options, options)
+    end
+
     association = object.association(association_name)
 
     if association.is_a?(ActiveRecord::Associations::HasManyThroughAssociation)
