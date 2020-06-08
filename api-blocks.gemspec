@@ -33,7 +33,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rails', '~> 6.0'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec', '>= 3.0.0'
-  s.add_development_dependency 'rubocop', '0.85.0'
+  s.add_development_dependency 'rubocop', '0.85.1'
   s.add_development_dependency 'yard'
   s.add_development_dependency 'yard-activesupport-concern'
 
