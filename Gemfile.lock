@@ -219,7 +219,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.9.0)
     rspec-support (3.9.0)
-    rubocop (0.89.1)
+    rubocop (0.90.0)
       parallel (~> 1.10)
       parser (>= 2.7.1.1)
       rainbow (>= 2.2.2, < 4.0)
@@ -262,7 +262,7 @@ DEPENDENCIES
   rails (~> 6.0)
   rake
   rspec (>= 3.0.0)
-  rubocop (~> 0.89.1)
+  rubocop (~> 0.90.0)
   rubocop-config-rufo (~> 0.1.0)!
   yard
   yard-activesupport-concern
