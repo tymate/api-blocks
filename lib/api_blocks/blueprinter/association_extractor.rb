@@ -23,7 +23,9 @@ module Blueprinter
 
       raise 'Cannot load blueprints with a `proc` blueprint option with batch-loader' if options[:blueprint].is_a?(Proc)
 
-      join_key = ::ApiBlocks::Blueprinter::JoinKeys.join_keys(association.reflection)
+      join_key = ::ApiBlocks::Blueprinter::JoinKeys.join_keys(
+        association.reflection
+      )
 
       association_id = object.send(join_key.foreign_key)
       association_klass = association.reflection.class_name
