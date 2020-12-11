@@ -18,7 +18,8 @@ Gem::Specification.new do |s|
   s.files         = Dir['lib/*', 'lib/**/*.rb', 'lib/**/**/*.rb']
   s.require_paths = ['lib']
 
-  s.add_dependency 'activesupport', '>= 3.0.0'
+  s.add_dependency 'activesupport', '>= 5.1.0'
+  s.add_dependency 'dry-configurable', '~> 0.8'
   s.add_dependency 'dry-monads', '~> 1.3'
   s.add_dependency 'dry-transaction', '~> 0.13'
   s.add_dependency 'dry-validation', '~> 1.3'
@@ -26,7 +27,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'pundit', '~> 2.1'
   s.add_dependency 'rails', '>= 6.0.0'
   s.add_dependency 'responders', '~> 3.0.0'
-  s.add_dependency 'dry-configurable', '~> 0.8'
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'mocha'
   s.add_development_dependency 'pry'

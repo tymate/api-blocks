@@ -53,107 +53,113 @@
 #     end
 #   end
 #
-module ApiBlocks::Doorkeeper::Passwords::Controller
-  extend ActiveSupport::Concern
+module ApiBlocks
+  module Doorkeeper
+    module Passwords
+      module Controller
+        extend ActiveSupport::Concern
 
-  included do # rubocop:disable Metrics/BlockLength
-    # Skip pundit after action hooks because there is no authorization to
-    # perform.
-    skip_after_action :verify_authorized
-    skip_after_action :verify_policy_scoped
+        included do # rubocop:disable Metrics/BlockLength
+          # Skip pundit after action hooks because there is no authorization to
+          # perform.
+          skip_after_action :verify_authorized
+          skip_after_action :verify_policy_scoped
 
-    # Initialize the reset password workflow, sends a reset password email to
-    # the user.
-    def create
-      user = user_model.send_reset_password_instructions(
-        create_params, application: oauth_application
-      )
+          # Initialize the reset password workflow, sends a reset password email to
+          # the user.
+          def create
+            user = user_model.send_reset_password_instructions(
+              create_params, application: oauth_application
+            )
 
-      if successfully_sent?(user)
-        render(status: :no_content)
-      else
-        respond_with(user)
+            if successfully_sent?(user)
+              render(status: :no_content)
+            else
+              respond_with(user)
+            end
+          end
+
+          # Handles the redirection from the email towards the application's
+          # `redirect_uri`.
+          def callback
+            query = {
+              reset_password_token: params[:reset_password_token]
+            }.to_query
+
+            redirect_to(
+              "#{oauth_application.reset_password_uri}?#{query}"
+            )
+          end
+
+          # Updates the user password and returns a new Doorkeeper::AccessToken.
+          def update
+            user = user_model.reset_password_by_token(update_params)
+
+            return respond_with(user) unless user.errors.empty?
+
+            user.unlock_access! if unlockable?(user)
+
+            respond_with(Doorkeeper::OAuth::TokenResponse.new(
+              access_token(oauth_application, user)
+            ).body)
+          end
+
+          private
+
+          # Create permitted parameters
+          def create_params
+            params.require(:user).permit(:email)
+          end
+
+          # Update permitted parameters
+          def update_params
+            params.require(:user).permit(
+              :reset_password_token, :password
+            )
+          end
+
+          # Copied over from devise base controller in order to clear user errors if
+          # `Devise.paranoid` is active.
+          def successfully_sent?(user)
+            if Devise.paranoid
+              user.errors.clear
+              true
+            elsif user.errors.empty?
+              true
+            end
+          end
+
+          # Copied over from devise base controller in order to determine wether a ser
+          # is unlockable or not.
+          def unlockable?(resource)
+            resource.respond_to?(:unlock_access!) &&
+              resource.respond_to?(:unlock_strategy_enabled?) &&
+              resource.unlock_strategy_enabled?(:email)
+          end
+
+          # Returns a new access token for this user.
+          def access_token(application, user)
+            Doorkeeper::AccessToken.find_or_create_for(
+              application,
+              user.id,
+              Doorkeeper.configuration.default_scopes,
+              Doorkeeper.configuration.access_token_expires_in,
+              true
+            )
+          end
+
+          def oauth_application
+            @oauth_application ||= Doorkeeper::Application.find_by!(
+              uid: params[:client_id]
+            )
+          end
+
+          # Returns the user model class.
+          def user_model
+            raise 'the method `user_model` must be implemented on your password controller'
+          end
+        end
       end
-    end
-
-    # Handles the redirection from the email towards the application's
-    # `redirect_uri`.
-    def callback
-      query = {
-        reset_password_token: params[:reset_password_token]
-      }.to_query
-
-      redirect_to(
-        "#{oauth_application.reset_password_uri}?#{query}"
-      )
-    end
-
-    # Updates the user password and returns a new Doorkeeper::AccessToken.
-    def update
-      user = user_model.reset_password_by_token(update_params)
-
-      return respond_with(user) unless user.errors.empty?
-
-      user.unlock_access! if unlockable?(user)
-
-      respond_with(Doorkeeper::OAuth::TokenResponse.new(
-        access_token(oauth_application, user)
-      ).body)
-    end
-
-    private
-
-    # Create permitted parameters
-    def create_params
-      params.require(:user).permit(:email)
-    end
-
-    # Update permitted parameters
-    def update_params
-      params.require(:user).permit(
-        :reset_password_token, :password
-      )
-    end
-
-    # Copied over from devise base controller in order to clear user errors if
-    # `Devise.paranoid` is active.
-    def successfully_sent?(user)
-      if Devise.paranoid
-        user.errors.clear
-        true
-      elsif user.errors.empty?
-        true
-      end
-    end
-
-    # Copied over from devise base controller in order to determine wether a ser
-    # is unlockable or not.
-    def unlockable?(resource)
-      resource.respond_to?(:unlock_access!) &&
-        resource.respond_to?(:unlock_strategy_enabled?) &&
-        resource.unlock_strategy_enabled?(:email)
-    end
-
-    # Returns a new access token for this user.
-    def access_token(application, user)
-      Doorkeeper::AccessToken.find_or_create_for(
-        application,
-        user.id,
-        Doorkeeper.configuration.default_scopes,
-        Doorkeeper.configuration.access_token_expires_in,
-        true
-      )
-    end
-
-    def oauth_application
-      @oauth_application ||= Doorkeeper::Application.find_by!(
-        uid: params[:client_id]
-      )
-    end
-
-    # Returns the user model class.
-    def user_model
-      raise 'the method `user_model` must be implemented on your password controller' # rubocop:disable Metrics/LineLength
     end
   end
 end

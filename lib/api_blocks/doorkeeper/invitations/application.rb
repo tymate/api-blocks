@@ -8,10 +8,16 @@
 #
 # @private
 #
-module ApiBlocks::Doorkeeper::Invitations::Application
-  extend ActiveSupport::Concern
+module ApiBlocks
+  module Doorkeeper
+    module Invitations
+      module Application
+        extend ActiveSupport::Concern
 
-  included do
-    validates :invitation_uri, "doorkeeper/redirect_uri": true
+        included do
+          validates :invitation_uri, "doorkeeper/redirect_uri": true
+        end
+      end
+    end
   end
 end
