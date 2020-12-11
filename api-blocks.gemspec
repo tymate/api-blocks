@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.files         = Dir['lib/*', 'lib/**/*.rb', 'lib/**/**/*.rb']
   s.require_paths = ['lib']
 
-  s.add_dependency 'activesupport', '>= 3.0.0'
+  s.add_dependency 'activesupport', '>= 5.1.0'
   s.add_dependency 'dry-monads', '~> 1.3'
   s.add_dependency 'dry-transaction', '~> 0.13'
   s.add_dependency 'dry-validation', '~> 1.3'

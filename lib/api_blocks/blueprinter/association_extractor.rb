@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'join_keys'
+
 # Monkey-patch Blueprinter::AssociationExtractor to use `batch-loader` gem in
 # order to avoid n+1 queries when serializing associations.
 #
@@ -24,7 +26,8 @@ class Blueprinter::AssociationExtractor < Blueprinter::Extractor
       raise "Cannot load blueprints with a `proc` blueprint option with batch-loader"
     end
 
-    join_key = association.reflection.join_keys
+    join_key = ::ApiBlocks::Blueprinter::JoinKeys.join_keys(association.reflection)
+
     association_id = object.send(join_key.foreign_key)
     association_klass = association.reflection.class_name
 
