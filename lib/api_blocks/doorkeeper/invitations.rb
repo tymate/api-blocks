@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
 # ApiBlocks::Doorkeeper::Invitations implements an API invitation workflow.
-module ApiBlocks::Doorkeeper::Invitations
-  extend ActiveSupport::Autoload
+module ApiBlocks
+  module Doorkeeper
+    module Invitations
+      extend ActiveSupport::Autoload
 
-  autoload :Controller
-  autoload :Application
+      autoload :Controller
+      autoload :Application
+    end
+  end
 end

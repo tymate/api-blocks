@@ -8,10 +8,16 @@
 #
 # @private
 #
-module ApiBlocks::Doorkeeper::Passwords::Application
-  extend ActiveSupport::Concern
+module ApiBlocks
+  module Doorkeeper
+    module Passwords
+      module Application
+        extend ActiveSupport::Concern
 
-  included do
-    validates :reset_password_uri, "doorkeeper/redirect_uri": true
+        included do
+          validates :reset_password_uri, "doorkeeper/redirect_uri": true
+        end
+      end
+    end
   end
 end
