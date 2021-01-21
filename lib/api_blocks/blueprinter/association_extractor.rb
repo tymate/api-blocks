@@ -54,6 +54,7 @@ module Blueprinter
           model.where(join_key.key => ids).merge(scope).each do |record|
             loader.call(record.send(join_key.key)) do |memo|
               memo << render_blueprint(record, local_options, options)
+              memo.uniq
             end
           end
         when ActiveRecord::Associations::HasOneAssociation
