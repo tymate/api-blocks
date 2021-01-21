@@ -54,7 +54,7 @@ module ApiBlocks
 
             user.unlock_access! if unlockable?(user)
 
-            respond_with(Doorkeeper::OAuth::TokenResponse.new(
+            respond_with(::Doorkeeper::OAuth::TokenResponse.new(
               access_token(oauth_application, user)
             ).body)
           end
@@ -81,17 +81,17 @@ module ApiBlocks
 
           # Returns a new access token for this user.
           def access_token(application, user)
-            Doorkeeper::AccessToken.find_or_create_for(
+            ::Doorkeeper::AccessToken.find_or_create_for(
               application,
               user.id,
-              Doorkeeper.configuration.default_scopes,
-              Doorkeeper.configuration.access_token_expires_in,
+              ::Doorkeeper.configuration.default_scopes,
+              ::Doorkeeper.configuration.access_token_expires_in,
               true
             )
           end
 
           def oauth_application
-            @oauth_application ||= Doorkeeper::Application.find_by!(
+            @oauth_application ||= ::Doorkeeper::Application.find_by!(
               uid: params[:client_id]
             )
           end
