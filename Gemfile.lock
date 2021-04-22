@@ -158,7 +158,7 @@ GEM
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
     parallel (1.20.1)
-    parser (3.0.0.0)
+    parser (3.0.1.0)
       ast (~> 2.4.1)
     problem_details (0.2.2)
       rack (>= 1.1.0)
@@ -207,7 +207,7 @@ GEM
     responders (3.0.1)
       actionpack (>= 5.0)
       railties (>= 5.0)
-    rexml (3.2.4)
+    rexml (3.2.5)
     rspec (3.10.0)
       rspec-core (~> 3.10.0)
       rspec-expectations (~> 3.10.0)
@@ -221,7 +221,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.10.0)
     rspec-support (3.10.0)
-    rubocop (1.12.0)
+    rubocop (1.13.0)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)
@@ -263,7 +263,7 @@ DEPENDENCIES
   rails (~> 6.0)
   rake
   rspec (>= 3.0.0)
-  rubocop (~> 1.12.0)
+  rubocop (~> 1.13.0)
   rubocop-config-rufo (~> 0.1.0)!
   yard
   yard-activesupport-concern
